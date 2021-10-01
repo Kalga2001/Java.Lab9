@@ -1,0 +1,203 @@
+package com.company;
+import java.util.Scanner;
+import java.lang.Math;
+
+ class Sharp
+        {
+            public static double Pi=3.1415926;
+            public static double area;
+            public static double volume;
+
+           public Sharp(){;}
+
+        }
+
+        class Cicle extends Sharp
+        {
+            private double r;
+            public Cicle()
+                {
+                   ;
+                }
+
+            public double Area(double r)
+            {
+                area=Pi*(r*r);
+                return area;
+            }
+
+            public String toString(double r)
+            {
+               return  String.format("Площадь круга: "+Area(r));
+            }
+        }
+
+        class Square extends Sharp
+        {
+            private double a;
+            public Square()
+            {
+                ;
+            }
+
+            public double Area(double a)
+            {
+                return a*a;
+            }
+
+            @Override
+            public String toString()
+            {
+                return String.format("Площадь квадрата: "+Area(a));
+            }
+        }
+
+        class Triangle extends Sharp {
+    private double a;
+    private double b;
+    public Triangle()
+            {
+              ;
+            }
+
+            public double Area(double a, double b)
+            {
+                area=0.5*a*b;
+                return area;
+            }
+
+            @Override
+            public String toString()
+            {
+                return String.format("Площадь треугольника: "+Area(a,b));
+            }
+        }
+
+        class Sphere extends  Sharp
+        {
+            private double r;
+          public Sphere()
+          {
+          ;
+          }
+
+          public double Area(double r)
+          {
+              area=4*Pi*(r*r);
+              return area;
+          }
+
+          public double Volume(double r)
+          {
+              volume=(4/3)*Pi*(r*r*r);
+              return volume;
+          }
+
+            @Override
+            public String toString()
+            {
+                return String.format("Площадь сфера: "+Area(r)+"\n"+"Обьем сферы: "+Volume(r));
+            }
+        }
+
+        class Cube extends  Sharp
+         {
+            private double a;
+            public Cube()
+            {
+              ;
+            }
+
+             public double Area(double a)
+             {
+                 area=6*(a*a);
+                 return area;
+             }
+
+             public double Volume(double a)
+             {
+                 volume=(a*a*a);
+                 return volume;
+             }
+
+             @Override
+             public String toString()
+             {
+                 return String.format("Площадь куба: "+Area(a)+"\n"+"Обьем куба: "+Volume(a));
+             }
+         }
+
+         class Tetrahedron extends  Sharp
+         {
+             private double a;
+             public Tetrahedron()
+             {
+                ;
+             }
+
+             public double Area(double a)
+             {
+                 area=(a*a)*Math.sqrt(3);
+                 return area;
+             }
+
+             public double Volume(double a) {
+                 volume=((a*a*a)*Math.sqrt(2))/12;
+                 return volume;
+             }
+
+             @Override
+             public String toString()
+             {
+                 return String.format("Площадь тетраэдра: "+Area(a)+"\n"+"Обьем тетраэдра: "+Volume(a));
+             }
+         }
+
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        Sharp figures[] = new Sharp[6];
+        Sharp sharp = new Sharp();
+
+        figures[0] = new Cicle();
+        figures[1] = new Tetrahedron();
+        figures[2] = new Square();
+        figures[3] = new Cube();
+        figures[4] = new Triangle();
+        figures[5] = new Sphere();
+
+        Cicle cicle = new Cicle();
+        Tetrahedron tetrahedron = new Tetrahedron();
+        Square square = new Square();
+        Cube cube = new Cube();
+        Triangle triangle = new Triangle();
+        Sphere sphere = new Sphere();
+        System.out.println("Если введенное число четное, то фигуры двумерные, иначе трехмерные: ");
+
+        for (int i = 0; i < figures.length; i++) {
+            System.out.println("Введите число: ");
+            int select=input.nextInt();
+            if (select%2==0)
+            {
+                System.out.println("Двумерные фигуры: ");
+                System.out.println("Площадь круга:" +cicle.Area(5));
+                System.out.println("Площадь квадрата: "+square.Area(5));
+                System.out.println("Площадь треугольника: "+triangle.Area(5, 7));
+            }
+            else
+            {
+                        System.out.println("Трехмерные фигуры: ");
+                        System.out.println("Площадь тетраэдара: " + tetrahedron.Area(4));
+                        System.out.println("Обьем тетраэдара: " + tetrahedron.Volume(5));
+                        System.out.println("Площадь куба: " + cube.Area(5));
+                        System.out.println("Обьем куба: " + cube.Volume(5));
+                        System.out.println("Площадь сферы: " + sphere.Area(5));
+                        System.out.println("Обьем сферы: " + sphere.Volume(5));
+                }
+
+            }
+
+        }
+
+    }
