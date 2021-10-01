@@ -1,0 +1,219 @@
+package com.company;
+import java.util.Scanner;
+
+class Employee extends Date
+{
+    private String firstName;
+    private String lastName;
+    private String socialSecurityNumber;
+    public Employee(String firstName,String lastName,String socialSecurityNumber,int month, int year, int day,double grossSales,
+                    double commissionRate, double baseSalary)
+    {
+        super(month, day, year, grossSales,
+         commissionRate,  baseSalary);
+
+        this.firstName=firstName;
+        this.lastName=lastName;
+        this.socialSecurityNumber=socialSecurityNumber;
+    }
+
+    public String getFirstName()
+    {
+        return firstName;
+    }
+
+    public String getLastName()
+    {
+        return lastName;
+    }
+
+    public String getSocialSecurityNumber()
+    {
+        return socialSecurityNumber;
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("First_name: "+firstName+"\n"+"Last_name: "+lastName+"\n"+"SocialSecurityNumber: "
+                +socialSecurityNumber+"\n"+super.toString());
+    }
+}
+
+class Date extends BasePlusCommissionEmployee
+ {
+         private int month; // 1-12
+         private int day; // 1-31 based on month
+         private int year; // any year
+
+         private static final int[] daysPerMonth =
+               { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+        public Date(int month, int day, int year,double grossSales,
+                    double commissionRate, double baseSalary)
+         {
+                super( grossSales,  commissionRate, baseSalary);
+          if (month <= 0 || month > 12)
+              throw new IllegalArgumentException(
+                   "month (" + month + ") must be 1-12");
+             if (day <= 0 ||
+                      (day > daysPerMonth[month] && !(month == 2 && day == 29)))
+              throw new IllegalArgumentException("day (" + day + ") out-of-range for the specified month and year");
+            if (month == 2 && day == 29 && !(year % 400 == 0 ||
+                (year % 4 == 0 && year % 100 != 0)))
+                throw new IllegalArgumentException("day (" + day +
+                         ") out-of-range for the specified month and year");
+             this.month = month;
+             this.day = day;
+              this.year = year;
+
+
+         }
+         private double bonus;
+
+         public double Bonus(int _month )
+         {
+             if(_month==month)
+                  bonus=getBaseSalary() +100.00;
+                  return bonus;
+
+         }
+
+         public double getBonus()
+         {
+             return bonus;
+         }
+
+         public int getMonth()
+         {
+             return month;
+         }
+
+         public String toString()
+         {
+           return String.format("День: "+day+"\n"+"Месяц: "+month+"\n"+"Год:"+year+"\n"+"Валовые продажи: "
+                   +getGrossSales()+"\n"+"Ставка коммиссионного вознаграждения: "+getCommissionRate()+"\n"+"Базовая зарплата: "
+                   +getBaseSalary()+"\n"+ "Бонус: "+ getBonus());
+         }
+ }
+
+class CommissionEmployee
+{
+    private double grossSales; // gross weekly sales
+ private double commissionRate; // commission percentage
+
+         public CommissionEmployee( double grossSales,
+ double commissionRate)
+ {
+     if (commissionRate <= 0.0 || commissionRate >= 1.0) // validate
+         throw new IllegalArgumentException(
+             "Commission rate must be > 0.0 and < 1.0");
+    if (grossSales < 0.0) // validate
+         throw new IllegalArgumentException("Gross sales must be >= 0.0");
+     this.grossSales = grossSales;
+      this.commissionRate = commissionRate;
+     }
+
+
+        public void setGrossSales(double grossSales)
+ {
+    if (grossSales < 0.0) // validate
+         throw new IllegalArgumentException("Gross sales must be >= 0.0");
+
+    this.grossSales = grossSales;
+   }
+
+         public double getGrossSales()
+ {
+     return grossSales;
+     }
+
+
+        public void setCommissionRate(double commissionRate)
+ {
+    if (commissionRate <= 0.0 || commissionRate >= 1.0) // validate
+        throw new IllegalArgumentException(
+             "Commission rate must be > 0.0 and < 1.0");
+
+     this.commissionRate = commissionRate;
+     }
+
+         public double getCommissionRate()
+     {
+    return commissionRate;
+    }
+
+    public double earnings()
+    {
+        return getCommissionRate() * getGrossSales();
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("%s: %s%n%s: $%,.2f; %s: %.2f",
+                "gross sales", getGrossSales(),
+                "commission rate", getCommissionRate());
+    }
+}
+
+ class BasePlusCommissionEmployee extends CommissionEmployee
+ {
+     private double baseSalary; // base salary per week
+        public BasePlusCommissionEmployee(double grossSales,
+ double commissionRate, double baseSalary)
+ {
+    super(grossSales,commissionRate);
+
+      if (baseSalary < 0.0) // validate baseSalary
+          throw new IllegalArgumentException("Base salary must be >= 0.0");
+
+      this.baseSalary = baseSalary;
+      }
+
+
+        public void setBaseSalary(double baseSalary)
+ {
+      if (baseSalary < 0.0) // validate baseSalary
+         throw new IllegalArgumentException("Base salary must be >= 0.0");
+     this.baseSalary = baseSalary;
+      }
+
+
+         public double getBaseSalary()
+     {
+      return baseSalary;
+      }
+
+
+     public double earnings() {
+         return getBaseSalary() + super.earnings();
+     }
+     @Override
+
+     public String toString()
+     {
+         return String.format("%s %s; %s: $%,.2f",
+                 "base-salaried", super.toString(),
+                 "base salary", getBaseSalary());
+     }
+ }
+
+
+public class Main {
+    public static void main(String[] args) {
+         Scanner input=new Scanner(System.in);
+
+         Employee emp1=new Employee("Karen", "Kole", "222-22-2222", 4,2000,5,4, 0.4,2000);
+         Employee emp2=new Employee("Igor", "Krilov", "222-24-2325", 2,2001,2,12, 0.2,3000);
+         Employee emp[]=new Employee[2];
+         emp[0]=emp1;
+         emp[1]=emp2;
+
+       emp[0].Bonus(4);
+       System.out.println(emp[0].toString());
+             emp[1].Bonus(4);
+        System.out.println(emp[1].toString());
+
+         }
+
+        }
