@@ -1,0 +1,311 @@
+package com.company;
+import java.util.Scanner;
+import java.lang.Math;
+
+ abstract class Employee
+{
+    private final String firstName;
+private final String lastName;
+ private final String socialSecurityNumber;
+
+         public Employee(String firstName, String lastName,
+ String socialSecurityNumber)
+ {
+     this.firstName = firstName;
+     this.lastName = lastName;
+     this.socialSecurityNumber = socialSecurityNumber;
+     }
+
+         public String getFirstName()
+ {
+     return firstName;
+     }
+
+
+         public String getLastName()
+ {
+    return lastName;
+     }
+
+
+        public String getSocialSecurityNumber()
+    {
+    return socialSecurityNumber;
+    }
+
+    @Override
+  public String toString()
+  {
+     return String.format("%s %s%nsocial security number: %s",
+             getFirstName(), getLastName(), getSocialSecurityNumber());
+  }
+    public abstract double earnings();
+}
+
+
+ class PieceWorker extends Employee
+{
+
+    private double wage;
+    private double pieces;
+
+
+
+    public PieceWorker( String first, String last, String ssn,
+                        double wagePerPiece, double piecesProduced )
+    {
+        super( first, last, ssn);
+        setWage( wagePerPiece);
+        setPieces( piecesProduced);
+    }
+
+    public void setWage(double wagedWork)
+    {
+        wage = wagedWork;
+    }
+
+    public double getWage()
+    {
+        return wage;
+    }
+
+
+    public void setPieces( double piecesMade)
+    {
+        pieces = piecesMade;
+    }
+
+    public double getPieces()
+    {
+        return pieces;
+    }
+
+
+    public double earnings()
+    {
+        return getWage() * getPieces();
+
+    }
+    public String toString()
+    {
+        return String.format( "%s: %s\n%s: $%,.2f\n%s: %.2f",
+                "Piecework Employee", super.toString(),"Wage is", getWage(),
+                "Number of pieces", getPieces(), earnings() );
+    }
+}
+
+class CommissionEmployee extends Employee
+{
+    private double grossSales; // gross weekly sales
+    private double commissionRate; // commission percentage
+
+    public CommissionEmployee( String firstName, String lastName,
+                              String socialSecurityNumber, double grossSales,
+                               double commissionRate)
+    {
+        super(firstName,lastName,socialSecurityNumber);
+        if (commissionRate <= 0.0 || commissionRate >= 1.0) // validate
+            throw new IllegalArgumentException(
+                    "Commission rate must be > 0.0 and < 1.0");
+        if (grossSales < 0.0) // validate
+            throw new IllegalArgumentException("Gross sales must be >= 0.0");
+        this.grossSales = grossSales;
+        this.commissionRate = commissionRate;
+    }
+
+
+    public void setGrossSales(double grossSales)
+    {
+        if (grossSales < 0.0) // validate
+            throw new IllegalArgumentException("Gross sales must be >= 0.0");
+
+        this.grossSales = grossSales;
+    }
+
+    public double getGrossSales()
+    {
+        return grossSales;
+    }
+
+
+    public void setCommissionRate(double commissionRate)
+    {
+        if (commissionRate <= 0.0 || commissionRate >= 1.0) // validate
+            throw new IllegalArgumentException(
+                    "Commission rate must be > 0.0 and < 1.0");
+
+        this.commissionRate = commissionRate;
+    }
+
+    public double getCommissionRate()
+    {
+        return commissionRate;
+    }
+
+    public double earnings()
+    {
+        return getCommissionRate() * getGrossSales();
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("%s: %s%n%s: $%,.2f; %s: %.2f",
+                "gross sales", getGrossSales(),
+                "commission rate", getCommissionRate());
+    }
+}
+
+class BasePlusCommissionEmployee extends CommissionEmployee
+{
+    private double baseSalary;
+    public BasePlusCommissionEmployee(String firstName, String lastName,
+ String socialSecurityNumber, double grossSales,
+ double commissionRate, double baseSalary)
+ {
+    super(firstName, lastName, socialSecurityNumber,
+             grossSales, commissionRate);
+
+        if (baseSalary < 0.0) // validate baseSalary
+            throw new IllegalArgumentException("Base salary must be >= 0.0");
+
+        this.baseSalary = baseSalary;
+    }
+
+
+    public void setBaseSalary(double baseSalary)
+    {
+        if (baseSalary < 0.0) // validate baseSalary
+            throw new IllegalArgumentException("Base salary must be >= 0.0");
+        this.baseSalary = baseSalary;
+    }
+
+
+    public double getBaseSalary()
+    {
+        return baseSalary;
+    }
+
+    @Override
+    public double earnings()
+    {
+        return getBaseSalary() + earnings();
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("%s %s; %s: $%,.2f",
+                "base-salaried", super.toString(),
+                "base salary", getBaseSalary());
+    }
+}
+
+ class SalariedEmployee extends Employee {
+     private double weeklySalary;
+
+     public SalariedEmployee(String firstName, String lastName,
+                             String socialSecurityNumber, double weeklySalary) {
+         super(firstName, lastName, socialSecurityNumber);
+
+         if (weeklySalary < 0.0)
+             throw new IllegalArgumentException(
+                     "Weekly salary must be >= 0.0");
+
+         this.weeklySalary = weeklySalary;
+     }
+
+     public void setWeeklySalary(double weeklySalary) {
+         if (weeklySalary < 0.0)
+             throw new IllegalArgumentException(
+                     "Weekly salary must be >= 0.0");
+
+         this.weeklySalary = weeklySalary;
+     }
+
+     public double getWeeklySalary() {
+         return weeklySalary;
+     }
+
+     @Override
+     public double earnings()
+     {
+         return getWeeklySalary();
+     }
+
+     @Override
+     public String toString()
+     {
+         return String.format("salaried employee: %s%n%s: $%,.2f",
+                 super.toString(), "weekly salary", getWeeklySalary());
+     }
+ }
+
+ class HourlyEmployee extends Employee {
+     private double wage; // wage per hour
+     private double hours; // hours worked for week
+
+
+     public HourlyEmployee(String firstName, String lastName,
+                           String socialSecurityNumber, double wage, double hours) {
+         super(firstName, lastName, socialSecurityNumber);
+         if (wage < 0.0) // validate wage
+             throw new IllegalArgumentException(
+                     "Hourly wage must be >= 0.0");
+
+         if ((hours < 0.0) || (hours > 168.0)) // validate hours
+             throw new IllegalArgumentException(
+                     "Hours worked must be >= 0.0 and <= 168.0");
+
+         this.wage = wage;
+         this.hours = hours;
+     }
+
+     public void setWage(double wage) {
+         if (wage < 0.0) // validate wage
+             throw new IllegalArgumentException(
+                     "Hourly wage must be >= 0.0");
+         this.wage = wage;
+     }
+
+     public double getWage() {
+         return wage;
+     }
+
+     public void setHours(double hours) {
+         if ((hours < 0.0) || (hours > 168.0)) // validate hours
+             throw new IllegalArgumentException(
+                     "Hours worked must be >= 0.0 and <= 168.0");
+
+         this.hours = hours;
+     }
+
+     public double getHours() {
+         return hours;
+     }
+
+     @Override
+     public double earnings() {
+         if (getHours() <= 40) // no overtime
+             return getWage() * getHours();
+         else
+             return 40 * getWage() + (getHours() - 40) * getWage() * 1.5;
+     }
+ }
+
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        Employee employees[] = new Employee[ 1 ];
+        employees[ 0 ] = new PieceWorker( "Enrique" , "Carbajal Jr", "555-55-5555", 99.99, 237);
+        for ( Employee currentEmployee : employees )
+        {
+            System.out.println( currentEmployee ); // invokes toString
+            System.out.println("\nearned \n"+ currentEmployee.earnings() );
+        }
+    }
+}
+
+
+
